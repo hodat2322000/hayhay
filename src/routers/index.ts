@@ -1,17 +1,11 @@
 import * as express from "express";
+import index from "../controller/index"
+import login from "../controller/login"
+
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.render("index");
-});
-router.get("/login", (req, res) => {
-  res.render("index");
-});
-router.post("/login", (req, res) => {
-  const { uname, psw } = req.body;
-  if (uname === "admin" && psw === "admin")
-    res.json({ login: true, mes: "ok" });
-  else res.json({ login: false, mes: "acc sai" });
-});
+router.get("/",index);
+router.get("/login", login.login);
+router.post("/login", login.postLogin);
 export default router;

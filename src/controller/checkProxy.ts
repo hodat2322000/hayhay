@@ -1,6 +1,7 @@
 import axios from "axios";
-import fs from "fs"
-import path from "path"
+import fs from "fs";
+import { hostname } from "os";
+import path from "path";
 
 const proxy = (req: any, res: any) => {
   res.render("checkProxy");
@@ -9,15 +10,9 @@ const proxy = (req: any, res: any) => {
 const handleCheckProxy = (req: any, res: any) => {
   res.json({ checkProxy: "check" });
 };
-const listProxy = async() => {
-    const listProxy: any = await axios.get("http://localhost:3000/listProxy.json");
-    return listProxy.data
-}
 
 const checkProxy = async (proxy: string) => {
-    
   try {
-    
     const proxyUrl = new URL(proxy);
     const targetUrl = "http://ip-api.com/json";
     const axiosConfig = {
@@ -37,20 +32,10 @@ const checkProxy = async (proxy: string) => {
     };
 
     const response = await axios.get(targetUrl, axiosConfig);
-
     if (response.status === 200) {
-        console.log(response.data);
-        
-      return {
-        data: response.data,
-        message: "Proxy is working. Status is 200"
-      }
-    } else {
-        return {
-            data: response.data,
-            message: `Status is ${response.status}`
-          }
+      return `Proxy working, ${JSON.stringify(response.data)}`;
     }
+    return `Proxy status is ${response.status}`;
   } catch (error: any) {
     return "Error: " + error.message;
   }
@@ -63,4 +48,9 @@ function isValidProxyFormat(proxy: string) {
   return proxyRegex.test(proxy);
 }
 
-export default { proxy, handleCheckProxy, checkProxy, isValidProxyFormat, listProxy };
+export default {
+  proxy,
+  handleCheckProxy,
+  checkProxy,
+  isValidProxyFormat,
+};

@@ -1,8 +1,6 @@
 const TelegramBot = require("node-telegram-bot-api");
-
 const dotenv = require("dotenv");
 const { auto } = require("./autoCheckProxy.js");
-
 dotenv.config();
 const {
   addProxy,
@@ -58,7 +56,11 @@ bot.on("message", async (msg) => {
         `
       );
     }
-  } else if (!isValidProxyFormat(messageText)) {
+
+    return bot.sendMessage(chatId, "Please provide a valid proxy.");
+  } 
+  
+  if (!isValidProxyFormat(messageText)) {
     return bot.sendMessage(chatId, "Please provide a valid proxy");
   } else {
     const messageCheckProxy = await checkProxy(messageText);
